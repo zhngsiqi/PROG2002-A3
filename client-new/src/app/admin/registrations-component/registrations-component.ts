@@ -104,4 +104,15 @@ export class RegistrationsComponent implements OnInit {
       });
     }
   }
+
+  deleteRegistration(reg: any) {
+    if (confirm(`Are you sure you want to delete registration, User name: ${reg.full_name}?`)) {
+      this.regService.deleteRegistration(reg.registration_id).subscribe(() => {
+        this.fetchRegistrations();
+        this.toast.warn('Registration deleted successfully');
+      }, err => {
+        this.toast.error(err?.error?.error || 'Delete failed')
+      });
+    }
+  }
 }

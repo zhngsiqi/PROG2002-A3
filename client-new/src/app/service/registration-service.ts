@@ -33,4 +33,9 @@ export class RegistrationService {
   updateRegistration(id: number, registration: any): Observable<any> {
     return this.httpClient.put(this.API_URL + '/' + id, registration);
   }
+
+  // delete registration
+  deleteRegistration(id: number): Observable<any> {
+    return this.httpClient.delete(this.API_URL + '/' + id);
+  }
 }

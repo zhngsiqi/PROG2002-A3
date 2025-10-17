@@ -217,4 +217,22 @@ router.put('/:id', (req, res) => {
     });
 });
 
+router.delete('/:id', (req, res) => {
+  // delete sql
+  const sql = `DELETE FROM registrations WHERE registration_id = ?`;
+
+  conn.promise().query(sql, [req.params.id])
+    .then(([result]) => {
+      res.json({
+        message: 'Registration deleted successfully'
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({
+        error: 'Server error'
+      });
+    });
+});
+
 module.exports = router;
