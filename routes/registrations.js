@@ -104,4 +104,117 @@ router.get('/', (req, res) => {
     });
 });
 
+// Add registration
+router.post('/', (req, res) => {
+  const { event_id, full_name, email, phone, tickets } = req.body;
+
+  // validate fields
+  if (!event_id || !full_name || !email || !tickets || tickets <= 0) {
+    return res.status(400).json({
+      error: 'Missing or invalid required fields'
+    });
+  }
+
+  // check if user already registered for the event
+  const checkSql = `SELECT registration_id FROM registrations WHERE event_id = ? AND email = ?`;
+  conn.promise().query(checkSql, [event_id, email])
+    .then(([rows]) => {
+      if (rows.length > 0) {
+        return res.status(400).json({
+          error: 'You have already registered for this event'
+        });
+      }
+
+      // get ticket price
+      const priceSql = 'SELECT ticket_price FROM events WHERE event_id = ?';
+      return conn.promise().query(priceSql, [event_id]);
+    })
+    .then(([rows]) => {
+      if (!rows) return;
+      if (rows.length === 0) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+
+      // calculate total amount
+      const ticket_price = rows[0].ticket_price;
+      const total_amount = ticket_price * tickets;
+
+      // insert sql
+      const insertSql = `
+        INSERT INTO registrations (event_id, full_name, email, phone, tickets, total_amount)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+      return conn.promise().query(insertSql, [event_id, full_name, email, phone, tickets, total_amount]);
+    })
+    .then(([result]) => {
+      if (!result) return;
+      res.status(201).json({
+        message: 'Registration added successfully',
+        registration_id: result.insertId
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({
+        error: 'Server error'
+      });
+    });
+});
+
+router.put('/:id', (req, res) => {
+  const { full_name, email, phone, tickets } = req.body;
+
+  // validate fields
+  if (!full_name || !email || !tickets || tickets <= 0) {
+    return res.status(400).json({
+      error: 'Missing or invalid required fields'
+    });
+  }
+
+  // get registration's event_id to recalc total_amount
+  const getEventSql = 'SELECT event_id FROM registrations WHERE registration_id = ?';
+  conn.promise().query(getEventSql, [req.params.id])
+    .then(([rows]) => {
+      if (rows.length === 0) {
+        return res.status(404).json({
+          error: 'Registration not found'
+        });
+      }
+      const event_id = rows[0].event_id;
+
+      // get ticket price
+      const priceSql = 'SELECT ticket_price FROM events WHERE event_id = ?';
+      return conn.promise().query(priceSql, [event_id])
+        .then(([priceRows]) => {
+          if (priceRows.length === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+          }
+
+          // calculate total amount
+          const ticket_price = priceRows[0].ticket_price;
+          const total_amount = ticket_price * tickets;
+
+          // update sql
+          const updateSql = `
+            UPDATE registrations 
+            SET full_name = ?, email = ?, phone = ?, tickets = ?, total_amount = ?
+            WHERE registration_id = ?
+          `;
+          return conn.promise().query(updateSql, [full_name, email, phone, tickets, total_amount, req.params.id]);
+        });
+    })
+    .then(([result]) => {
+      if (!result) return;
+      res.json({
+        message: 'Registration updated successfully'
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({
+        error: 'Server error'
+      });
+    });
+});
+
 module.exports = router;

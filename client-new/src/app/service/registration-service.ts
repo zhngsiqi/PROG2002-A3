@@ -24,4 +24,13 @@ export class RegistrationService {
     return this.httpClient.post(this.API_URL, payload);
   }
 
+  // add registration
+  addRegistration(registration: any): Observable<any> {
+    return this.httpClient.post(this.API_URL, registration);
+  }
+
+  // update registration
+  updateRegistration(id: number, registration: any): Observable<any> {
+    return this.httpClient.put(this.API_URL + '/' + id, registration);
+  }
 }

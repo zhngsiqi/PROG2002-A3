@@ -1,6 +1,6 @@
 <div class="registrations-header">
   <h2>Manage Registrations</h2>
-  <button>Add Registration</button>
+  <button (click)="showForm()">Add Registration</button>
 </div>
 
 <!-- registration table -->
@@ -28,10 +28,54 @@
     <td>{{ reg.registration_date | date:'yyyy-MM-dd, hh:mm' }}</td>
     <td>
       <div class="actions">
-        <button>Edit</button>
+        <button (click)="showForm(reg)">Edit</button>
         <button>Delete</button>
       </div>
     </td>
   </tr>
   </tbody>
 </table>
+
+<!-- modal -->
+<div class="modal" [class.show]="formVisible">
+  <div class="modal-content">
+    <span class="close" (click)="cancelForm()">&times;</span>
+    <h3>{{ editingRegId ? 'Edit Registration' : 'Add Registration' }}</h3>
+    <form [formGroup]="regForm" (ngSubmit)="submitForm()">
+      <div>
+        <select formControlName="event_id" >
+          <option value="">--Select Event--</option>
+          <option *ngFor="let event of events" [value]="event.event_id">{{ event.name }}</option>
+        </select>
+        <div class="error" *ngIf="regForm.get('event_id')?.touched && regForm.get('event_id')?.invalid">
+          Event is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="full_name" placeholder="Full Name" />
+        <div class="error" *ngIf="regForm.get('full_name')?.touched && regForm.get('full_name')?.invalid">
+          Name is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="email" placeholder="Email" />
+        <div class="error" *ngIf="regForm.get('email')?.touched && regForm.get('email')?.invalid">
+          Please input valid email.
+        </div>
+      </div>
+      <div>
+        <input formControlName="phone" placeholder="Phone" />
+      </div>
+      <div>
+        <input formControlName="tickets" type="number" placeholder="Tickets" />
+        <div class="error" *ngIf="regForm.get('tickets')?.touched && regForm.get('tickets')?.invalid">
+          Tickets must be positive.
+        </div>
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="btn-submit">{{ editingRegId ? 'Update' : 'Add' }}</button>
+        <button type="button" class="btn-cancel" (click)="cancelForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
