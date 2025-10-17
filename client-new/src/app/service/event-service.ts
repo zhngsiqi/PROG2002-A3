@@ -36,4 +36,16 @@ export class EventService {
   fetchSingleEvent(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(this.API_URL + '/' + id)
   }
+
+  addEvent(event: any): Observable<any> {
+    return this.httpClient.post(this.API_URL, event);
+  }
+
+  updateEvent(id: number, event: any): Observable<any> {
+    return this.httpClient.put(this.API_URL + '/' + id, event);
+  }
+
+  deleteEvent(id: number): Observable<any> {
+    return this.httpClient.delete(this.API_URL + '/' + id);
+  }
 }

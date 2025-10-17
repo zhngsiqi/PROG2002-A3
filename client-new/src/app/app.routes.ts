@@ -33,7 +33,7 @@ export const routes: Routes = [
         component: EventsComponent
       },
       {
-        path: 'registrations/:eventId',
+        path: 'registrations',
         component: RegistrationsComponent
       }
     ]
