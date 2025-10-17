@@ -1,0 +1,86 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../event_db');
+const conn = db.getconnection();
+
+// Retrieve all registration records for the specified event
+router.get('/:event_id', (req, res) => {
+  const sql = `
+    SELECT r.registration_id, r.full_name, r.email, r.phone, 
+           r.tickets, r.total_amount, r.registration_date
+    FROM registrations r
+    WHERE r.event_id = ?
+    ORDER BY r.registration_date DESC
+  `;
+
+  conn.promise().query(sql, [req.params.event_id])
+    .then(([rows]) => {
+      res.json(rows); // Return to the registration list
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({ error: 'Server error' });
+    });
+});
+
+// Add a new registration record
+// The request body should include: event_id, full_name, email, phone, tickets
+router.post('/', (req, res) => {
+  const { event_id, full_name, email, phone, tickets } = req.body;
+
+  // Check required fields
+  if (!event_id || !full_name || !email || !tickets) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  // First, check if the event has been registered
+  const checkSql = `
+    SELECT registration_id FROM registrations 
+    WHERE event_id = ? AND email = ?
+  `;
+  conn.promise().query(checkSql, [event_id, email])
+    .then(([rows]) => {
+      if (rows.length > 0) {
+        // The user has registered for this event
+        return res.status(400).json({
+          error: 'You have already registered for this event'
+        });
+      }
+
+      // Check ticket prices
+      const priceSql = 'SELECT ticket_price FROM events WHERE event_id = ?';
+      return conn.promise().query(priceSql, [event_id]);
+    })
+    .then(([rows]) => {
+      if (!rows) return;
+
+      if (rows.length === 0) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+
+      // calculate total amount
+      const ticket_price = rows[0].ticket_price;
+      const total_amount = ticket_price * tickets;
+
+      const insertSql = `
+        INSERT INTO registrations (event_id, full_name, email, phone, tickets, total_amount)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+      return conn.promise().query(insertSql, [
+        event_id, full_name, email, phone, tickets, total_amount
+      ]);
+    })
+    .then(([result]) => {
+      if (!result) return; // If you have already responded earlier, do not continue
+      res.status(201).json({
+        message: 'Registration successful',
+        registration_id: result.insertId
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({ error: 'Server error' });
+    });
+});
+
+module.exports = router;
