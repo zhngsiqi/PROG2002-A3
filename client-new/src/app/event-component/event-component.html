@@ -3,7 +3,7 @@
 
 <main>
   <div id="event-details">
-    <div class="event-card">
+    <div *ngIf="event" class="event-card">
       <h2>{{event.name}}</h2>
       <p><strong>Status:</strong> <span class="${event.status}">{{event.status}}</span></p>
       <p><strong>Organisation:</strong> {{event.organisation}}</p>
@@ -13,6 +13,13 @@
       <p><strong>Price:</strong> ${{event.ticket_price}}</p>
       <p><strong>Goal:</strong> ${{event.goal_amount}} | <strong>Raised:</strong> ${{event.raised_amount}}</p>
       <p><strong>Description:</strong> {{event.description}}</p>
+
+      <div class="weather-card" *ngIf="weather">
+        <img src="/images/weather.png" alt="Weather" style="width: 50px;" />
+        <h3>Today's Weather</h3>
+        <p><strong>Condition:</strong> {{ getWeatherDescription(weather.code) }}</p>
+        <p><strong>Temperature:</strong> {{weather.min}}°C - {{weather.max}}°C</p>
+      </div>
     </div>
   </div>
 
