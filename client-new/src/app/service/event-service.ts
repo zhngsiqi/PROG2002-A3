@@ -15,4 +15,21 @@ export class EventService {
   fetchEvents(): Observable<any[]> {
     return this.httpClient.get<any[]>(this.API_URL)
   }
+
+  searchEvents(date: string, location: string, category: string): Observable<any[]> {
+    const params: any = {}
+
+    // If the search input box is filled in, the corresponding parameters should be concatenated in the URL
+    if (date) {
+      params['date'] = date
+    }
+    if (location) {
+      params['location'] = location
+    }
+    if (category) {
+      params['category'] = category
+    }
+
+    return this.httpClient.get<any[]>(this.API_URL + '/search', { params })
+  }
 }
