@@ -12,6 +12,10 @@ export class RegistrationService {
   constructor(private httpClient: HttpClient) {
   }
 
+  fetchAllRegistrations(): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.API_URL);
+  }
+
   fetchEventRegistrations(eventId: number): Observable<any[]> {
     return this.httpClient.get<any[]>(this.API_URL + `/${eventId}`);
   }

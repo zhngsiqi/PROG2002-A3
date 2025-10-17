@@ -83,4 +83,25 @@ router.post('/', (req, res) => {
     });
 });
 
+// Retrieve all registration records
+router.get('/', (req, res) => {
+  const sql = `
+    SELECT r.registration_id, r.full_name, r.email, r.phone, 
+           r.tickets, r.total_amount, r.registration_date,
+           e.name AS event_name, e.start_date AS event_start_date
+    FROM registrations r
+    JOIN events e ON r.event_id = e.event_id
+    ORDER BY r.registration_date DESC
+  `;
+
+  conn.promise().query(sql)
+    .then(([rows]) => res.json(rows))
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({
+        error: 'Server error'
+      });
+    });
+});
+
 module.exports = router;

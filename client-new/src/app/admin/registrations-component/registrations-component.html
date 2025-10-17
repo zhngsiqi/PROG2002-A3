@@ -1,1 +1,37 @@
-<p>registrations-component works!</p>
+<div class="registrations-header">
+  <h2>Manage Registrations</h2>
+  <button>Add Registration</button>
+</div>
+
+<!-- registration table -->
+<table class="registrations-table">
+  <thead>
+  <tr>
+    <th>Event</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Tickets</th>
+    <th>Total Amount</th>
+    <th>Registered At</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of registrations">
+    <td>{{ reg.event_name }}</td>
+    <td>{{ reg.full_name }}</td>
+    <td>{{ reg.email }}</td>
+    <td>{{ reg.phone }}</td>
+    <td>{{ reg.tickets }}</td>
+    <td>{{ reg.total_amount | currency }}</td>
+    <td>{{ reg.registration_date | date:'yyyy-MM-dd, hh:mm' }}</td>
+    <td>
+      <div class="actions">
+        <button>Edit</button>
+        <button>Delete</button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
