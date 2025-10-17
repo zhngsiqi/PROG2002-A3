@@ -3,6 +3,9 @@ import {IndexComponent} from './index-component/index-component';
 import {SearchComponent} from './search-component/search-component';
 import {EventComponent} from './event-component/event-component';
 import {RegisterComponent} from './register-component/register-component';
+import {AdminComponent} from './admin-component/admin-component';
+import {EventsComponent} from './admin/events-component/events-component';
+import {RegistrationsComponent} from './admin/registrations-component/registrations-component';
 
 export const routes: Routes = [
   {
@@ -20,5 +23,19 @@ export const routes: Routes = [
   {
     path: 'register/:id',
     component: RegisterComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    children: [
+      {
+        path: '',
+        component: EventsComponent
+      },
+      {
+        path: 'registrations/:eventId',
+        component: RegistrationsComponent
+      }
+    ]
   }
 ];
