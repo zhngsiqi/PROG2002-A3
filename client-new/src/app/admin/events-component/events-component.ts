@@ -101,4 +101,17 @@ export class EventsComponent implements OnInit {
       });
     }
   }
+
+  deleteEvent(event: any) {
+    if (confirm(`Are you sure you want to delete event: ${event.name}?`)) {
+      this.eventService.deleteEvent(event.event_id!).subscribe(() => {
+        // refresh events
+        this.fetchEvent()
+        // success message
+        this._toastService.warn("Event deleted successfully")
+      }, error => {
+        this._toastService.error(error?.error?.error || "Delete Error")
+      });
+    }
+  }
 }

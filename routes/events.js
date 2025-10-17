@@ -267,4 +267,36 @@ router.put('/:id', (req, res) => {
     });
 });
 
+router.delete('/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  // check event registrations
+  const checkSql = `SELECT COUNT(*) AS count FROM registrations WHERE event_id = ?`;
+  conn.promise().query(checkSql, [eventId])
+    .then(([checkRows]) => {
+      // return error message when event has registrations
+      if (checkRows[0].count > 0) {
+        return res.status(400).json({
+          error: 'Event cannot be deleted because it has registrations'
+        });
+      }
+
+      // delete event
+      const deleteSql = `DELETE FROM events WHERE event_id = ?`;
+      return conn.promise().query(deleteSql, [eventId]);
+    })
+    .then(([result]) => {
+      // delete successfully
+      if (result) {
+        res.json({ message: 'Event deleted successfully' });
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      res.status(500).json({
+        error: 'Server error'
+      });
+    });
+});
+
 module.exports = router;
