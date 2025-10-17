@@ -50,3 +50,28 @@ INSERT INTO events (organisation_id, category_id, name, description, location, s
 (1, 3, 'Book Auction', 'Auction of rare books to support literacy programs', 'Library Hall', '2025-08-20 14:00:00', '2025-08-20 17:00:00', 0.00, 10000.00, 7500.00, 'past'),
 (2, 4, 'Summer Concert', 'Music festival for environmental awareness', 'Beachside Stage', '2025-07-30 16:00:00', '2025-07-30 22:00:00', 30.00, 25000.00, 24000.00, 'past');
 
+
+CREATE TABLE registrations (
+    registration_id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tickets INT NOT NULL CHECK (tickets > 0),
+    total_amount DECIMAL(10,2),
+    FOREIGN KEY (event_id) REFERENCES events(event_id),
+    UNIQUE (event_id, email)
+);
+
+INSERT INTO registrations (event_id, full_name, email, phone, tickets, total_amount) VALUES
+(1, 'Alice Johnson', 'alice@example.com', '0411-111-111', 2, 200.00),
+(1, 'Bob Smith', 'bob@example.com', '0422-222-222', 1, 100.00),
+(2, 'Carol Lee', 'carol@example.com', '0433-333-333', 3, 60.00),
+(2, 'David Brown', 'david@example.com', '0444-444-444', 2, 40.00),
+(3, 'Eve Wilson', 'eve@example.com', '0455-555-555', 1, 0.00),
+(4, 'Frank Adams', 'frank@example.com', '0466-666-666', 4, 200.00),
+(4, 'Grace Chen', 'grace@example.com', '0477-777-777', 2, 100.00),
+(5, 'Henry White', 'henry@example.com', '0488-888-888', 1, 15.00),
+(6, 'Isabel Garcia', 'isabel@example.com', '0499-999-999', 3, 360.00),
+(7, 'Jack Nguyen', 'jack@example.com', '0400-000-000', 2, 0.00);
