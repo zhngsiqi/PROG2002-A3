@@ -15,10 +15,12 @@ export class IndexComponent implements OnInit {
   events: any[] = []
   err = ""
 
+  // inject event service
   constructor(private eventService: EventService) {
   }
 
   ngOnInit(): void {
+    // fetch all events to show list card
     this.eventService.fetchEvents().subscribe(result => {
       this.events = result
     }, err => {

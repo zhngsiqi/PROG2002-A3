@@ -22,7 +22,9 @@ export class SearchComponent {
   constructor(private eventService: EventService) {
   }
 
+  // form submit method
   formSubmit() {
+    // search event by date/location/category
     this.eventService.searchEvents(this.date, this.location, this.category).subscribe(result => {
       this.events = result
     }, err => {

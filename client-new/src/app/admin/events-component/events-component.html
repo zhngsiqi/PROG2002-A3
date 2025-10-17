@@ -1,6 +1,6 @@
 <div class="events-header">
   <h2>Manage Events</h2>
-  <button>+ Add Event</button>
+  <button (click)="showForm()">Add Event</button>
 </div>
 
 
@@ -25,10 +25,94 @@
     <td>{{ event.ticket_price }}</td>
     <td>
       <div class="actions">
-        <button>Edit</button>
+        <button (click)="showForm(event)">Edit</button>
         <button>Delete</button>
       </div>
     </td>
   </tr>
   </tbody>
 </table>
+
+<!-- modal -->
+<div class="modal" [class.show]="formVisible">
+  <div class="modal-content">
+    <span class="close" (click)="cancelForm()">&times;</span>
+    <h3>{{ editingEventId ? 'Edit Event' : 'Add Event' }}</h3>
+    <form [formGroup]="eventForm" (ngSubmit)="submitForm()">
+      <div>
+        <select formControlName="category_id" >
+          <option value="">--Select--</option>
+          <option value="1">Gala Dinner</option>
+          <option value="2">Fun Run</option>
+          <option value="3">Auction</option>
+          <option value="4">Concert</option>
+        </select>
+        <div class="error" *ngIf="eventForm.get('category_id')?.touched && eventForm.get('category_id')?.invalid">
+          Category is required.
+        </div>
+      </div>
+      <div>
+        <select formControlName="organisation_id" >
+          <option value="">--Select--</option>
+          <option value="1">Hope Foundation</option>
+          <option value="2">Green Earth</option>
+        </select>
+        <div class="error" *ngIf="eventForm.get('organisation_id')?.touched && eventForm.get('organisation_id')?.invalid">
+          Organisation is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="name" placeholder="Event Name" required />
+        <div class="error" *ngIf="eventForm.get('name')?.touched && eventForm.get('name')?.invalid">
+          Name is required (max 100 chars).
+        </div>
+      </div>
+      <div>
+        <input formControlName="description" placeholder="Event Description" />
+      </div>
+      <div>
+        <input formControlName="location" placeholder="Location" required />
+        <div class="error" *ngIf="eventForm.get('location')?.touched && eventForm.get('location')?.invalid">
+          Location is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="start_date" type="datetime-local" placeholder="Start Date" required />
+        <div class="error" *ngIf="eventForm.get('start_date')?.touched && eventForm.get('start_date')?.invalid">
+          Start date is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="end_date" type="datetime-local" placeholder="End Date" required />
+        <div class="error" *ngIf="eventForm.get('end_date')?.touched && eventForm.get('end_date')?.invalid">
+          End date is required.
+        </div>
+      </div>
+      <div>
+        <input formControlName="ticket_price" type="number" placeholder="Ticket Price" />
+      </div>
+      <div>
+        <input formControlName="goal_amount" type="number" placeholder="Goal Amount" />
+      </div>
+      <div>
+        <input formControlName="raised_amount" type="number" placeholder="Raised Amount" />
+      </div>
+      <div>
+        <input formControlName="latitude" type="number" placeholder="Latitude" />
+        <div class="error" *ngIf="eventForm.get('latitude')?.touched && eventForm.get('latitude')?.invalid">
+          Latitude must be between -90 and 90.
+        </div>
+      </div>
+      <div>
+        <input formControlName="longitude" type="number" placeholder="Longitude" />
+        <div class="error" *ngIf="eventForm.get('longitude')?.touched && eventForm.get('longitude')?.invalid">
+          Longitude must be between -180 and 180.
+        </div>
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="btn-submit">{{ editingEventId ? 'Update' : 'Add' }}</button>
+        <button type="button" class="btn-cancel" (click)="cancelForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
