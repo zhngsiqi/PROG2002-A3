@@ -15,4 +15,9 @@ export class RegistrationService {
   fetchEventRegistrations(eventId: number): Observable<any[]> {
     return this.httpClient.get<any[]>(this.API_URL + `/${eventId}`);
   }
+
+  registerForEvent(payload: any) {
+    return this.httpClient.post(this.API_URL, payload);
+  }
+
 }

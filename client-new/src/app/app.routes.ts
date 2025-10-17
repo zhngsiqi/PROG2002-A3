@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {IndexComponent} from './index-component/index-component';
 import {SearchComponent} from './search-component/search-component';
 import {EventComponent} from './event-component/event-component';
+import {RegisterComponent} from './register-component/register-component';
 
 export const routes: Routes = [
   {
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'event/:id',
     component: EventComponent
+  },
+  {
+    path: 'register/:id',
+    component: RegisterComponent
   }
 ];

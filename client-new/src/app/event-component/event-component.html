@@ -16,12 +16,12 @@
     </div>
   </div>
 
-  <div class="event-card" *ngIf="registrations.length > 0;">
+  <div class="event-card">
     <div class="registration-list-header">
       <h2>Registration List</h2>
-      <button class="button" onclick="alert('This feature is currently under construction.')">Register</button>
+      <button class="button" (click)="toRegister()">Register</button>
     </div>
-    <table>
+    <table *ngIf="registrations.length > 0;">
       <thead>
       <tr>
         <th>Name</th>

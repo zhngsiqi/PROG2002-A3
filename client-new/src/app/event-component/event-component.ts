@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {EventService} from '../service/event-service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {Navigation} from '../navigation/navigation';
 import {Information} from '../information/information';
@@ -17,7 +17,7 @@ export class EventComponent {
   err = ""
   registrations: any[] = [] // Array to save registration records
 
-  constructor(private eventService: EventService, private route: ActivatedRoute, private registrationService: RegistrationService) {
+  constructor(private eventService: EventService, private route: ActivatedRoute, private registrationService: RegistrationService, private router: Router) {
     const id = this.route.snapshot.params['id'];
 
     // Get event details
@@ -33,5 +33,9 @@ export class EventComponent {
     }, err => {
       this.err = err?.error?.message || err?.error?.error?.message
     })
+  }
+
+  toRegister() {
+    this.router.navigateByUrl('/register/' + this.event.event_id)
   }
 }

@@ -275,3 +275,13 @@ th, td {
   padding: 10px 15px;
   text-align: left;
 }
+
+.success {
+  color: #25d725;
+  margin-top: 10px;
+}
+
+.error {
+  color: #d22d2d;
+  margin-top: 10px;
+}
