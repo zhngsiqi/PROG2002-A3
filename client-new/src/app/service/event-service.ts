@@ -32,4 +32,8 @@ export class EventService {
 
     return this.httpClient.get<any[]>(this.API_URL + '/search', { params })
   }
+
+  fetchSingleEvent(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.API_URL + '/' + id)
+  }
 }
