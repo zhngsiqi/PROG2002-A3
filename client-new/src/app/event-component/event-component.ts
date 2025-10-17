@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import {EventService} from '../service/event-service';
 import {ActivatedRoute} from '@angular/router';
 import {CommonModule} from '@angular/common';
+import {Navigation} from '../navigation/navigation';
+import {Information} from '../information/information';
 
 @Component({
   selector: 'app-event-component',
-  imports: [CommonModule],
+  imports: [CommonModule, Navigation, Information],
   templateUrl: './event-component.html',
   styleUrl: './event-component.css'
 })

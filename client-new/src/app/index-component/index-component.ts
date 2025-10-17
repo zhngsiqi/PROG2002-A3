@@ -2,10 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {EventService} from '../service/event-service';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
+import {Navigation} from '../navigation/navigation';
+import {Information} from '../information/information';
 
 @Component({
   selector: 'app-index-component',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Navigation, Information],
   templateUrl: './index-component.html',
   styleUrl: './index-component.css'
 })

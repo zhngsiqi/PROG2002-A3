@@ -3,10 +3,12 @@ import {EventService} from '../service/event-service';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {Navigation} from '../navigation/navigation';
+import {Information} from '../information/information';
 
 @Component({
   selector: 'app-search-component',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Navigation, Information],
   templateUrl: './search-component.html',
   styleUrl: './search-component.css'
 })
