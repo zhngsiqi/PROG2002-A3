@@ -13,7 +13,33 @@
       <p><strong>Price:</strong> ${{event.ticket_price}}</p>
       <p><strong>Goal:</strong> ${{event.goal_amount}} | <strong>Raised:</strong> ${{event.raised_amount}}</p>
       <p><strong>Description:</strong> {{event.description}}</p>
+    </div>
+  </div>
+
+  <div class="event-card" *ngIf="registrations.length > 0;">
+    <div class="registration-list-header">
+      <h2>Registration List</h2>
       <button class="button" onclick="alert('This feature is currently under construction.')">Register</button>
     </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Tickets</th>
+        <th>Total Amount</th>
+        <th>Registration Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of registrations">
+        <td>{{ r.full_name }}</td>
+        <td>{{ r.email }}</td>
+        <td>{{ r.tickets }}</td>
+        <td>${{ r.total_amount }}</td>
+        <td>{{ r.registration_date | date:'medium' }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </main>

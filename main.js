@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const eventsRoutes = require('./routes/events');
+const registrationsRoutes = require('./routes/registrations');
 const path = require('path');
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/events', eventsRoutes);
+app.use('/api/registrations', registrationsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
